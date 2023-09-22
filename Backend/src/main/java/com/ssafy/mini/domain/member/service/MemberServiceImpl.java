@@ -7,6 +7,7 @@ import com.ssafy.mini.domain.member.dto.response.MemberLoginResponse;
 import com.ssafy.mini.domain.member.entity.Member;
 import com.ssafy.mini.domain.member.mapper.MemberMapper;
 import com.ssafy.mini.domain.member.repository.MemberRepository;
+import com.ssafy.mini.domain.nation.entity.Nation;
 import com.ssafy.mini.global.exception.ErrorCode;
 import com.ssafy.mini.global.exception.MNException;
 import com.ssafy.mini.global.jwt.JwtProvider;
@@ -149,6 +150,15 @@ public class MemberServiceImpl implements MemberService{
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
         return member.getMemType().getExpression();
+    }
+
+    @Override
+    public Nation getNationByMemberId(String memberId) {
+        Nation nation = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER))
+                .getIsoSeq();
+
+        return nation;
     }
 
 

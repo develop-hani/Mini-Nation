@@ -51,6 +51,12 @@ public class SwaggerConfig {
         ));
     }
 
+    @Bean Docket jobApi() {
+        return getDocket("com.ssafy.mini.domain.job.controller", "직업", Predicates.or(
+                PathSelectors.ant("/job/**")
+        ));
+    }
+
     public Docket getDocket(String base, String groupName, Predicate<String> predicate) {
         ParameterBuilder aParameterBuilder = new ParameterBuilder();
         aParameterBuilder.name("Authorization")
