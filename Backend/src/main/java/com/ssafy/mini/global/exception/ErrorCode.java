@@ -40,6 +40,7 @@ public enum ErrorCode {
     DUPLICATED_JOB(409, "직업 이름 중복"),
     ALREADY_APPLIED_JOB(409, "이미 지원한 직업입니다."),
     ALREADY_JOINED_JOB(409, "이미 가입한 직업입니다."),
+    NO_SUCH_APPLY(404, "존재하지 않는 지원입니다."),
 
     ;
 

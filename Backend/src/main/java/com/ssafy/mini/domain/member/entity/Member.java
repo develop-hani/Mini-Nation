@@ -46,7 +46,6 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "iso_seq")
     private Nation isoSeq;
 
-    // 현재 직업 추가하기
     @ManyToOne
     @JoinColumn(name = "job_seq")
     private Job jobSeq;
@@ -86,6 +85,10 @@ public class Member extends BaseEntity {
 
     public void setIsoSeq(Nation isoSeq) {
         this.isoSeq = isoSeq;
+    }
+
+    public void setJobSeq(Job jobSeq) {
+        this.jobSeq = jobSeq;
     }
 
 }

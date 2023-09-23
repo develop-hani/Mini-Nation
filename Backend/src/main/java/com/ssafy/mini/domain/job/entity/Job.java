@@ -55,4 +55,8 @@ public class Job {
         this.jobLeftCnt = jobLeftCnt;
     }
 
+    public void setJobLeftCnt(Byte jobLeftCnt) {
+        this.jobLeftCnt = jobLeftCnt;
+    }
+
 }

@@ -5,7 +5,9 @@ import com.ssafy.mini.domain.job.entity.Job;
 import com.ssafy.mini.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface ApplyRepository extends JpaRepository<Apply, Integer> {
 
-    Apply findByJobAndMember(Job job, Member member);
+    Optional<Apply> findByJobAndMember(Job job, Member member);
 }
