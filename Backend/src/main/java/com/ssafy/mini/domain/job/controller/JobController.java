@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @Slf4j
 @RestController
 @RequestMapping("/job")
@@ -23,12 +25,13 @@ public class JobController {
     @PostMapping("/register")
     @ApiResponses({
             @ApiResponse(code = 200, message = "직업 등록 성공"),
+            @ApiResponse(code = 400, message = "모집 인원은 1보다 작을 수 없습니다."),
             @ApiResponse(code = 402, message = "선생님만 등록할 수 있습니다."),
             @ApiResponse(code = 404, message = "직업 등록 실패"),
             @ApiResponse(code = 406, message = "주급은 0보다 작을 수 없습니다. "),
             @ApiResponse(code = 409, message = "직업 이름 중복")
     })
-    SuccessResponse register(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken,
+    public SuccessResponse register(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken,
                              @RequestBody @ApiParam(value = "직업 등록 정보", required = true) JobRegisterRequestDTO jobRegisterRequestDTO) {
         log.info("Job Controller Layer:: register() called");
 
@@ -39,5 +42,28 @@ public class JobController {
         return SuccessResponse.builder()
                 .build();
     }
+
+    @PostMapping("/apply")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "직업 지원 성공"),
+            @ApiResponse(code = 404, message = "직업 지원 실패"),
+            @ApiResponse(code = 406, message = "모집 인원이 남아있지 않습니다."),
+            @ApiResponse(code = 409, message = "이미 지원했거나 근무 중인 직업입니다.")
+    })
+    public SuccessResponse apply(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken,
+                          @RequestBody @ApiParam(value = "직업 이름", required = true) HashMap<String, String> jobInfo){
+
+        log.info("Job Controller Layer:: apply() called");
+
+        String memberId = jwtProvider.extractMemberId(accessToken);
+        String jobName = jobInfo.get("job_name");
+
+        jobService.apply(memberId, jobName);
+
+        return SuccessResponse.builder()
+                .build();
+    }
+
+
 }
 

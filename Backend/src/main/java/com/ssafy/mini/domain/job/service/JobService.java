@@ -4,4 +4,6 @@ import com.ssafy.mini.domain.job.dto.request.JobRegisterRequestDTO;
 
 public interface JobService {
     void register(String memberId, JobRegisterRequestDTO jobRegisterRequestDTO);
+
+    void apply(String memberId, String jobName);
 }

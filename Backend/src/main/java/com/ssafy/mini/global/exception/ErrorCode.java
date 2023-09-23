@@ -33,9 +33,15 @@ public enum ErrorCode {
     NO_NATION(404, "가입한 국가가 없습니다."),
 
     // 직업 관련 에러
+    INVALID_JOB_TOTAL(400, "모집 인원은 0명 이하일 수 없습니다."),
+    NO_SUCH_JOB(404, "존재하지 않는 직업입니다."),
     INVALID_JOB_PAY(406, "급여는 0원 이하일 수 없습니다."),
+    NO_LEFT_JOB(406, "모집 인원이 남아있지 않습니다."),
+    DUPLICATED_JOB(409, "직업 이름 중복"),
+    ALREADY_APPLIED_JOB(409, "이미 지원한 직업입니다."),
+    ALREADY_JOINED_JOB(409, "이미 가입한 직업입니다."),
 
-    DUPLICATED_JOB(409, "직업 이름 중복");
+    ;
 
     private final int code;
     private final String detail;

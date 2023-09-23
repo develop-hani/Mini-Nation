@@ -46,13 +46,13 @@ public class SwaggerConfig {
     }
 
     @Bean Docket homeApi() {
-        return getDocket("com.ssafy.mini.domain.home.controller", "홈", Predicates.or(
+        return getDocket("com.ssafy.mini.domain.home.controller", "홈 관리", Predicates.or(
                 PathSelectors.ant("/home/**")
         ));
     }
 
     @Bean Docket jobApi() {
-        return getDocket("com.ssafy.mini.domain.job.controller", "직업", Predicates.or(
+        return getDocket("com.ssafy.mini.domain.job.controller", "직업 관리", Predicates.or(
                 PathSelectors.ant("/job/**")
         ));
     }

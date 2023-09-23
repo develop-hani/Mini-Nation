@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Entity
 @Slf4j
 @NoArgsConstructor
-@Builder
 public class Apply {
 
     @Id
@@ -20,13 +19,15 @@ public class Apply {
     private Integer applySeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_seq")
     private Job job;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mem_seq")
     private Member member;
 
-    public Apply(Integer applySeq, Job job, Member member) {
-        this.applySeq = applySeq;
+    @Builder
+    public Apply(Job job, Member member) {
         this.job = job;
         this.member = member;
     }
