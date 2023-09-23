@@ -4,6 +4,7 @@ import com.ssafy.mini.domain.job.dto.request.JobApproveRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobDeclineRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobFireRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobRegisterRequestDTO;
+import com.ssafy.mini.domain.job.dto.response.JobDetailResponseDTO;
 import com.ssafy.mini.domain.job.dto.response.JobListResponseDTO;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface JobService {
     void decline(String memberId, JobDeclineRequestDTO jobDeclineRequestDTO);
 
     void fire(String memberId, JobFireRequestDTO jobFireRequestDTO);
+
+    JobDetailResponseDTO getJobDetail(String memberId, String jobName);
 }

@@ -6,6 +6,7 @@ import com.ssafy.mini.domain.job.dto.request.JobApproveRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobDeclineRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobFireRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobRegisterRequestDTO;
+import com.ssafy.mini.domain.job.dto.response.JobDetailResponseDTO;
 import com.ssafy.mini.domain.job.dto.response.JobListResponseDTO;
 import com.ssafy.mini.domain.job.entity.Job;
 import com.ssafy.mini.domain.job.repository.JobRepository;
@@ -126,14 +127,14 @@ public class JobServiceImpl implements JobService{
 
         // member에 직업 정보 저장
         applicant.setJobSeq(job);
-        memberRepository.save(applicant);
 
         // 해당 직업의 잔여 인원 수 감소
         job.setJobLeftCnt((byte) (job.getJobLeftCnt() - 1));
-        jobRepository.save(job);
 
-        // apply table에서 해당 지원 삭제
-        applyRepository.delete(apply);
+        memberRepository.save(applicant);
+        jobRepository.save(job);
+        // apply table에서 해당 지원자의 모든 지원 삭제
+        applyRepository.deleteAllByMember(applicant);
 
     }
 
@@ -227,6 +228,33 @@ public class JobServiceImpl implements JobService{
         employee.setJobSeq(null);
         memberRepository.save(employee);
 
+    }
+
+    @Override
+    public JobDetailResponseDTO getJobDetail(String memberId, String jobName) {
+
+        log.info("Job Service Layer:: getJobDetail() called");
+
+        // 선생님만 조회 가능
+        if(!memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER))
+                .getMemType().getExpression().equals("TC"))
+            throw new MNException(ErrorCode.NO_AUTHORITY);
+
+        Job job = jobRepository.findByJobName(jobName)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_JOB));
+
+        List<String> applicants = applyRepository.findMemIdByJobSeq(job);
+        List<String> employees = memberRepository.findMemIdByJobSeq(job);
+
+        return JobDetailResponseDTO.builder()
+                .applicatCount(applicants.size())
+                .recruitTotalCount(job.getJobTotalCnt())
+                .employeeCount(employees.size())
+                .recruitLeftCount(job.getJobLeftCnt())
+                .applicants(applicants)
+                .employees(employees)
+                .build();
     }
 
 }
