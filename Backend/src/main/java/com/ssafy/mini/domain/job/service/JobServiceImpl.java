@@ -3,6 +3,8 @@ package com.ssafy.mini.domain.job.service;
 import com.ssafy.mini.domain.apply.entity.Apply;
 import com.ssafy.mini.domain.apply.repository.ApplyRepository;
 import com.ssafy.mini.domain.job.dto.request.JobApproveRequestDTO;
+import com.ssafy.mini.domain.job.dto.request.JobDeclineRequestDTO;
+import com.ssafy.mini.domain.job.dto.request.JobFireRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobRegisterRequestDTO;
 import com.ssafy.mini.domain.job.dto.response.JobListResponseDTO;
 import com.ssafy.mini.domain.job.entity.Job;
@@ -171,5 +173,60 @@ public class JobServiceImpl implements JobService{
         return jobListResponseDTOList;
     }
 
+    @Override
+    public void decline(String memberId, JobDeclineRequestDTO jobDeclineRequestDTO) {
+        log.info("Job Service Layer:: decline() called");
+
+        Member member = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        if(!member.getMemType().getExpression().equals("TC"))
+            throw new MNException(ErrorCode.NO_AUTHORITY);
+
+        Job job = jobRepository.findByJobName(jobDeclineRequestDTO.getJobName())
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_JOB));
+
+        Member applicant = memberRepository.findByMemId(jobDeclineRequestDTO.getApplicantId())
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        Apply apply = applyRepository.findByJobAndMember(job, applicant)
+                .orElseThrow(()  -> new MNException(ErrorCode.NO_SUCH_APPLY));
+
+        // apply table에서 해당 지원 삭제
+        applyRepository.delete(apply);
+    }
+
+    @Override
+    public void fire(String memberId, JobFireRequestDTO jobFireRequestDTO) {
+
+        log.info("Job Service Layer:: fire() called");
+
+        Member member = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        if(!member.getMemType().getExpression().equals("TC"))
+            throw new MNException(ErrorCode.NO_AUTHORITY);
+
+        Job job = jobRepository.findByJobName(jobFireRequestDTO.getJobName())
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_JOB));
+
+        Member employee = memberRepository.findByMemId(jobFireRequestDTO.getEmployeeId())
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        // 해당 직업에서 근무하고 있지 않은 경우
+        if(employee.getJobSeq() == null)
+            throw new MNException(ErrorCode.NOT_PROPER_EMPLOYEE);
+        else if(!employee.getJobSeq().equals(job))
+            throw new MNException(ErrorCode.NOT_PROPER_EMPLOYEE);
+
+        // 해당 직업의 잔여 인원 수 증가
+        job.setJobLeftCnt((byte) (job.getJobLeftCnt() + 1));
+        jobRepository.save(job);
+
+        // member에 직업 정보 삭제
+        employee.setJobSeq(null);
+        memberRepository.save(employee);
+
+    }
 
 }

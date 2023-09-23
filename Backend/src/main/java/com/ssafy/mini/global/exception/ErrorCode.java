@@ -41,6 +41,7 @@ public enum ErrorCode {
     ALREADY_APPLIED_JOB(409, "이미 지원한 직업입니다."),
     ALREADY_JOINED_JOB(409, "이미 가입한 직업입니다."),
     NO_SUCH_APPLY(404, "존재하지 않는 지원입니다."),
+    NOT_PROPER_EMPLOYEE(404, "해당 직업에 근무하고 있지 않습니다."),
 
     ;
 
