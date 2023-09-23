@@ -4,6 +4,7 @@ import com.ssafy.mini.domain.apply.entity.Apply;
 import com.ssafy.mini.domain.apply.repository.ApplyRepository;
 import com.ssafy.mini.domain.job.dto.request.JobApproveRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobRegisterRequestDTO;
+import com.ssafy.mini.domain.job.dto.response.JobListResponseDTO;
 import com.ssafy.mini.domain.job.entity.Job;
 import com.ssafy.mini.domain.job.repository.JobRepository;
 import com.ssafy.mini.domain.member.entity.Member;
@@ -14,6 +15,9 @@ import com.ssafy.mini.global.exception.MNException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -43,7 +47,9 @@ public class JobServiceImpl implements JobService{
 
         // 직업 이름 중복 확인
         jobRepository.findByJobName(jobRegisterRequestDTO.getName())
-                .orElseThrow(() -> new MNException(ErrorCode.DUPLICATED_JOB));
+                .ifPresent(job -> {
+                    throw new MNException(ErrorCode.DUPLICATED_JOB_NAME);
+                });
 
         Job job = Job.builder()
                 .jobName(jobRegisterRequestDTO.getName())
@@ -128,4 +134,42 @@ public class JobServiceImpl implements JobService{
         applyRepository.delete(apply);
 
     }
+
+    @Override
+    public List<JobListResponseDTO> getJobList(String memberId){
+
+        List<JobListResponseDTO> jobListResponseDTOList = new ArrayList<>();
+        List<Job> jobList = jobRepository.findAll();
+
+        Member member = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        for(Job j : jobList){
+
+            List<Apply> applyList = applyRepository.findAllByJob(j);
+            List<String> employeeList = memberRepository.findMemIdByJobSeq(j);
+
+            int status = 0;
+            if(applyRepository.findByJobAndMember(j, member).isPresent())
+                status = 1;
+            else if(member.getJobSeq() != null)
+                if(member.getJobSeq().equals(j))
+                    status = 2;
+
+            jobListResponseDTOList.add(JobListResponseDTO.builder()
+                    .name(j.getJobName())
+                    .desc(j.getJobDesc())
+                    .pay(j.getJobPay())
+                    .recruitTotalCount(j.getJobTotalCnt())
+                    .applyCount(applyList.size())
+                    .requirement(j.getJobReq())
+                    .employees(employeeList)
+                    .status(status)
+                    .build());
+        }
+
+        return jobListResponseDTOList;
+    }
+
+
 }

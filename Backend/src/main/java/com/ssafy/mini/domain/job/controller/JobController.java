@@ -2,6 +2,7 @@ package com.ssafy.mini.domain.job.controller;
 
 import com.ssafy.mini.domain.job.dto.request.JobApproveRequestDTO;
 import com.ssafy.mini.domain.job.dto.request.JobRegisterRequestDTO;
+import com.ssafy.mini.domain.job.dto.response.JobListResponseDTO;
 import com.ssafy.mini.domain.job.service.JobService;
 import com.ssafy.mini.global.jwt.JwtProvider;
 import com.ssafy.mini.global.response.SuccessResponse;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -81,6 +83,21 @@ public class JobController {
 
         return SuccessResponse.builder()
                 .build();
+    }
+
+    @GetMapping("/list")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "직업 리스트 조회 성공"),
+            @ApiResponse(code = 404, message = "직업 리스트 조회 실패"),
+    })
+    public List<JobListResponseDTO> list(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken){
+
+        log.info("Job Controller Layer:: list() called");
+
+        String memberId = jwtProvider.extractMemberId(accessToken);
+
+        return jobService.getJobList(memberId);
+
     }
 
 
