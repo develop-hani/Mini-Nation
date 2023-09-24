@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 public class JwtProperties {
 
     private final String secret;
-    private final long accessTokenValidityInSeconds;
-    private final long refreshTokenValidityInSeconds;
+    private final long accessTokenValidity;
+    private final long refreshTokenValidity;
 
 }

@@ -4,9 +4,12 @@ import lombok.Getter;
 
 @Getter
 public class ReissueResponse {
+
     private String accessToken;
 
-    public ReissueResponse(String accessToken, String refreshToken) {
+    public ReissueResponse(String accessToken) {
+
         this.accessToken = accessToken;
+
     }
 }
