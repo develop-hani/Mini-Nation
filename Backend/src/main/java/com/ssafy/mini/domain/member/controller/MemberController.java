@@ -5,7 +5,7 @@ import com.ssafy.mini.domain.member.dto.request.MemberLoginRequest;
 import com.ssafy.mini.domain.member.dto.request.MemberUpdateRequest;
 import com.ssafy.mini.domain.member.dto.response.MemberLoginResponse;
 import com.ssafy.mini.domain.member.service.MemberService;
-import com.ssafy.mini.global.jwt.JwtProvider;
+import com.ssafy.mini.global.auth.jwt.JwtProvider;
 import com.ssafy.mini.global.response.SuccessResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

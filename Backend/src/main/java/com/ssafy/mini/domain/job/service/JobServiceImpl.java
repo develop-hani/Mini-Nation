@@ -1,5 +1,6 @@
 package com.ssafy.mini.domain.job.service;
 
+import com.ssafy.mini.domain.account.service.AccountService;
 import com.ssafy.mini.domain.apply.entity.Apply;
 import com.ssafy.mini.domain.apply.repository.ApplyRepository;
 import com.ssafy.mini.domain.job.dto.request.JobApproveRequestDTO;
@@ -13,25 +14,35 @@ import com.ssafy.mini.domain.job.repository.JobRepository;
 import com.ssafy.mini.domain.member.entity.Member;
 import com.ssafy.mini.domain.member.repository.MemberRepository;
 import com.ssafy.mini.domain.member.service.MemberService;
+import com.ssafy.mini.domain.nation.entity.Nation;
+import com.ssafy.mini.domain.nation.repository.NationRepository;
+import com.ssafy.mini.domain.tax.repository.TaxRepository;
 import com.ssafy.mini.global.exception.ErrorCode;
 import com.ssafy.mini.global.exception.MNException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JobServiceImpl implements JobService{
+public class JobServiceImpl implements JobService {
+
     private final MemberRepository memberRepository;
-
-    private final MemberService memberService;
-
     private final ApplyRepository applyRepository;
     private final JobRepository jobRepository;
+    private final NationRepository nationRepository;
+    private final TaxRepository taxRepository;
+
+    private final MemberService memberService;
+    private final AccountService accountService;
 
     @Override
     public void register(String memberId, JobRegisterRequestDTO jobRegisterRequestDTO) {
@@ -42,10 +53,10 @@ public class JobServiceImpl implements JobService{
             throw new MNException(ErrorCode.NO_AUTHORITY);
 
         // 급여가 0원 이하일 수 없음
-        if(jobRegisterRequestDTO.getPay() <= 0)
+        if (jobRegisterRequestDTO.getPay() <= 0)
             throw new MNException(ErrorCode.INVALID_JOB_PAY);
 
-        if(jobRegisterRequestDTO.getRecruit_total_count() <= 0)
+        if (jobRegisterRequestDTO.getRecruit_total_count() <= 0)
             throw new MNException(ErrorCode.INVALID_JOB_TOTAL);
 
         // 직업 이름 중복 확인
@@ -76,7 +87,7 @@ public class JobServiceImpl implements JobService{
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
         // 회원이 가입한 국가가 없을 경우
-        if(memberService.getNationByMemberId(memberId) == null)
+        if (memberService.getNationByMemberId(memberId) == null)
             throw new MNException(ErrorCode.NO_NATION);
 
         // 직업 이름이 존재하지 않을 경우
@@ -84,16 +95,16 @@ public class JobServiceImpl implements JobService{
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_JOB));
 
         // 직업에 지원한 인원이 모두 모였을 경우
-        if(job.getJobLeftCnt() == 0)
+        if (job.getJobLeftCnt() == 0)
             throw new MNException(ErrorCode.NO_LEFT_JOB);
 
         // 해당 직업에서 이미 근무하고 있는 경우
-        if(member.getJobSeq() != null)
-            if(member.getJobSeq().getJobSeq().equals(job.getJobSeq()))
+        if (member.getJobSeq() != null)
+            if (member.getJobSeq().getJobSeq().equals(job.getJobSeq()))
                 throw new MNException(ErrorCode.ALREADY_JOINED_JOB);
 
         // 해당 직업에 이미 지원한 경우
-        if(applyRepository.findByJobAndMember(job, member).isPresent())
+        if (applyRepository.findByJobAndMember(job, member).isPresent())
             throw new MNException(ErrorCode.ALREADY_APPLIED_JOB);
 
         // apply table에 저장
@@ -112,7 +123,7 @@ public class JobServiceImpl implements JobService{
         Member member = memberRepository.findByMemId(memberId)
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
-        if(!member.getMemType().getExpression().equals("TC"))
+        if (!member.getMemType().getExpression().equals("TC"))
             throw new MNException(ErrorCode.NO_AUTHORITY);
 
         Job job = jobRepository.findByJobName(jobApproveRequestDTO.getJobName())
@@ -123,7 +134,7 @@ public class JobServiceImpl implements JobService{
 
 
         Apply apply = applyRepository.findByJobAndMember(job, applicant)
-                .orElseThrow(()  -> new MNException(ErrorCode.NO_SUCH_APPLY));
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_APPLY));
 
         // member에 직업 정보 저장
         applicant.setJobSeq(job);
@@ -139,7 +150,7 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public List<JobListResponseDTO> getJobList(String memberId){
+    public List<JobListResponseDTO> getJobList(String memberId) {
 
         List<JobListResponseDTO> jobListResponseDTOList = new ArrayList<>();
         List<Job> jobList = jobRepository.findAll();
@@ -147,16 +158,16 @@ public class JobServiceImpl implements JobService{
         Member member = memberRepository.findByMemId(memberId)
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
-        for(Job j : jobList){
+        for (Job j : jobList) {
 
             List<Apply> applyList = applyRepository.findAllByJob(j);
             List<String> employeeList = memberRepository.findMemIdByJobSeq(j);
 
             int status = 0;
-            if(applyRepository.findByJobAndMember(j, member).isPresent())
+            if (applyRepository.findByJobAndMember(j, member).isPresent())
                 status = 1;
-            else if(member.getJobSeq() != null)
-                if(member.getJobSeq().equals(j))
+            else if (member.getJobSeq() != null)
+                if (member.getJobSeq().equals(j))
                     status = 2;
 
             jobListResponseDTOList.add(JobListResponseDTO.builder()
@@ -181,7 +192,7 @@ public class JobServiceImpl implements JobService{
         Member member = memberRepository.findByMemId(memberId)
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
-        if(!member.getMemType().getExpression().equals("TC"))
+        if (!member.getMemType().getExpression().equals("TC"))
             throw new MNException(ErrorCode.NO_AUTHORITY);
 
         Job job = jobRepository.findByJobName(jobDeclineRequestDTO.getJobName())
@@ -191,7 +202,7 @@ public class JobServiceImpl implements JobService{
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
         Apply apply = applyRepository.findByJobAndMember(job, applicant)
-                .orElseThrow(()  -> new MNException(ErrorCode.NO_SUCH_APPLY));
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_APPLY));
 
         // apply table에서 해당 지원 삭제
         applyRepository.delete(apply);
@@ -205,7 +216,7 @@ public class JobServiceImpl implements JobService{
         Member member = memberRepository.findByMemId(memberId)
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
-        if(!member.getMemType().getExpression().equals("TC"))
+        if (!member.getMemType().getExpression().equals("TC"))
             throw new MNException(ErrorCode.NO_AUTHORITY);
 
         Job job = jobRepository.findByJobName(jobFireRequestDTO.getJobName())
@@ -215,9 +226,9 @@ public class JobServiceImpl implements JobService{
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
         // 해당 직업에서 근무하고 있지 않은 경우
-        if(employee.getJobSeq() == null)
+        if (employee.getJobSeq() == null)
             throw new MNException(ErrorCode.NOT_PROPER_EMPLOYEE);
-        else if(!employee.getJobSeq().equals(job))
+        else if (!employee.getJobSeq().equals(job))
             throw new MNException(ErrorCode.NOT_PROPER_EMPLOYEE);
 
         // 해당 직업의 잔여 인원 수 증가
@@ -236,7 +247,7 @@ public class JobServiceImpl implements JobService{
         log.info("Job Service Layer:: getJobDetail() called");
 
         // 선생님만 조회 가능
-        if(!memberRepository.findByMemId(memberId)
+        if (!memberRepository.findByMemId(memberId)
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER))
                 .getMemType().getExpression().equals("TC"))
             throw new MNException(ErrorCode.NO_AUTHORITY);
@@ -255,6 +266,42 @@ public class JobServiceImpl implements JobService{
                 .applicants(applicants)
                 .employees(employees)
                 .build();
+    }
+
+    @Scheduled(cron = "0 0 2 * * ?")
+    private void pay() {
+
+        log.info("Job Service Layer:: pay() called");
+
+        // 오늘이 주급 지급일인 나라 찾기
+        List<Nation> nationList = nationRepository.findAllByPayday(LocalDateTime.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase(Locale.ROOT));
+
+        // 해당 나라의 국민에게 주급 지급하기
+        for (Nation n : nationList) {
+
+            byte taxRate = taxRepository.findTaxByNationSeqAndTaxType(n.getIsoSeq(),
+                    "TAX01").getTaxRate();      // 해당 나라의 소득세율
+            List<Member> memberList = memberRepository.findAllByIsoSeq(n);  // 해당 나라의 국민 목록
+
+            for (Member m : memberList) {
+
+                log.info("member: {}", m.getMemId());
+
+                if(m.getJobSeq() == null)   // 해당 국민이 직업을 가지고 있지 않으면 skip
+                    continue;
+
+                int pay = m.getJobSeq().getJobPay() * (100 - taxRate) / 100;    // 해당 국민의 직업의 급여
+
+                log.info("pay: {}", pay);
+
+                accountService.updateAccountBalance(accountService.getNormalAccount(m.getMemId()), pay, "PY", "급여");    // 해당 국민의 계좌에 주급 지급
+
+                log.info("account updated");
+
+                memberService.updateBalance(m.getMemId(), pay);    // 해당 국민 잔고 업데이트
+
+            }
+        }
     }
 
 }

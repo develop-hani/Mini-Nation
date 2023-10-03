@@ -9,6 +9,8 @@ services:
       - /var/mini:/data
     networks:
       - deploy
+    environment:
+      - TZ=Asia/Seoul
 
 networks:
   deploy:

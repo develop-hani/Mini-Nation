@@ -91,4 +91,8 @@ public class Member extends BaseEntity {
         this.jobSeq = jobSeq;
     }
 
+    public void updateMembalance(int memBalance) {
+    	this.memBalance += memBalance;
+    }
+
 }

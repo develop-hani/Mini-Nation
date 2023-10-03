@@ -1,29 +1,31 @@
 {
-  "root" : true,
-  "env": { 
-    "browser": true, 
-    "es6": true,
-    "node": true 
-},
-"extends": ["airbnb", "plugin:prettier/recommended"],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+    "root": true,
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
     },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
-  "plugins": ["react", "prettier", "react-hooks"],
-  "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "react/prop-types": "off",
-    // "react/no-unknown-property": ["error", { "ignore": ["css"] }],
-    "react/no-unknown-property": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ]
-  }
+    "extends": ["airbnb", "airbnb-base", "plugin:prettier/recommended"],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": ["react", "prettier", "react-hooks"],
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/no-unknown-property": "off",
+        "react/function-component-definition": "off",
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto"
+            }
+        ],
+        "linebreak-style": ["error", "windows"]
+    }
 }

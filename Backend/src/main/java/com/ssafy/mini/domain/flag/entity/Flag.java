@@ -17,7 +17,10 @@ public class Flag extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Byte flagSeq;
 
-    @Column(name = "flag_url", nullable = false, length = 50)
+    @Column(name = "flag_url", nullable = false, length = 100)
     private String flagUrl;
+
+    @Column(name = "checked_flag_url", nullable = false, length = 100)
+    private String checkedFlagUrl;
 
 }

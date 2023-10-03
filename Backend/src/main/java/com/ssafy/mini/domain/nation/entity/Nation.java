@@ -1,6 +1,7 @@
 package com.ssafy.mini.domain.nation.entity;
 
 import com.ssafy.mini.domain.flag.entity.Flag;
+import com.ssafy.mini.domain.nation.dto.request.LawUpdateRequest;
 import com.ssafy.mini.global.db.BaseEntity;
 import lombok.*;
 
@@ -49,6 +50,12 @@ public class Nation extends BaseEntity {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public void updateNation(LawUpdateRequest lawUpdateRequest){
+        this.isoName = lawUpdateRequest.getName();
+        this.isoCurrency = lawUpdateRequest.getCurrency();
+        this.payday = lawUpdateRequest.getPayday();
     }
 
 

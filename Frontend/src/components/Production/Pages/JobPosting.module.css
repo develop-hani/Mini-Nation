@@ -1,0 +1,25 @@
+.container {
+    width: 80%;
+    min-height: 15vh;
+    height: auto;
+    margin: auto auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    font-family: 'GmarketSansMedium', cursive;
+}
+
+.title {
+    position: relative;
+    left: 50%;
+}
+
+.addButton {
+    position: relative;
+    left: auto;
+}
+
+.ProductionButton2 {
+    margin-left: auto; /* 오른쪽으로 정렬 */
+}

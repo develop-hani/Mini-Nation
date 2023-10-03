@@ -1,0 +1,38 @@
+/* Foundation.module.css */
+.background {
+    background-color: rgba(215, 105, 4, 0.4);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+.container {
+    width: 60vw;
+    margin: auto;
+}
+
+.container2 {
+    display: flex;
+    width: 60vw; 
+    height: auto      
+}
+
+.img {
+    width: 30vw; /* 가로 크기를 viewport 가로 길이의 30%로 설정 */
+    height: auto;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.info {
+    width: 30vw; /* 가로 크기를 viewport 가로 길이의 30%로 설정 */
+    height: auto;
+    background-color: white;
+    border-radius: 0px 15px 15px 0px;    
+}
+
+.infoContent {
+    width: 80%;
+    margin: 0 auto;
+    margin: 10% auto 10% auto;
+}

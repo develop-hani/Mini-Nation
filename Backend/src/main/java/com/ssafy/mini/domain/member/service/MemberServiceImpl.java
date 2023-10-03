@@ -1,5 +1,8 @@
 package com.ssafy.mini.domain.member.service;
 
+import com.ssafy.mini.domain.account.entity.Account;
+import com.ssafy.mini.domain.account.repository.AccountRepository;
+import com.ssafy.mini.domain.master.entity.Master;
 import com.ssafy.mini.domain.master.repository.MasterRepository;
 import com.ssafy.mini.domain.member.dto.request.MemberJoinRequest;
 import com.ssafy.mini.domain.member.dto.request.MemberLoginRequest;
@@ -10,7 +13,7 @@ import com.ssafy.mini.domain.member.repository.MemberRepository;
 import com.ssafy.mini.domain.nation.entity.Nation;
 import com.ssafy.mini.global.exception.ErrorCode;
 import com.ssafy.mini.global.exception.MNException;
-import com.ssafy.mini.global.jwt.JwtProvider;
+import com.ssafy.mini.global.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,15 +21,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Random;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MasterRepository masterRepository;
+    private final AccountRepository accountRepository;
 
     private final MemberMapper memberMapper;
     private final JwtProvider jwtProvider;
@@ -51,6 +56,23 @@ public class MemberServiceImpl implements MemberService{
 
         member.setCardNo(generateCardNumber()); // 카드 번호 랜덤 생성
         memberRepository.save(member);
+
+        // 일반 통장 개설
+        Master master = masterRepository.findById("BNT03")
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_CODE));
+
+        Account account = Account.builder()
+                .member(member)
+                .bankCode(master)
+                .acctBalance(0)
+                .acctStartDate(new Date())
+                .acctExpireDate(new Date())
+                .acctDay("NON")
+                .acctSaving(9999)
+                .expAmount(9999)
+                .build();
+        System.out.println(account.toString());
+        accountRepository.save(account);
     }
 
     @Override
@@ -124,6 +146,7 @@ public class MemberServiceImpl implements MemberService{
 
     /**
      * 비밀번호 암호화
+     *
      * @param password 비밀번호
      * @return 암호화된 비밀번호
      */
@@ -133,6 +156,7 @@ public class MemberServiceImpl implements MemberService{
 
     /**
      * 카드 번호 랜덤 생성
+     *
      * @return 카드 번호
      */
     private String generateCardNumber() {
@@ -145,7 +169,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String getMemberType(String memberId){
+    public String getMemberType(String memberId) {
         Member member = memberRepository.findByMemId(memberId)
                 .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
 
@@ -159,6 +183,18 @@ public class MemberServiceImpl implements MemberService{
                 .getIsoSeq();
 
         return nation;
+    }
+
+    @Override
+    public void updateBalance(String memberId, int amount) {
+
+        Member member = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        member.updateMembalance(amount);
+
+        memberRepository.save(member);
+
     }
 
 

@@ -1,0 +1,77 @@
+/* Nationality.module.css */
+.background {
+    background-color: #a2d6ab;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    width: 60vw;
+}
+
+.inputContainer {
+    box-sizing: border-box;
+    border-radius: 15px 0px 0px 15px;
+    background-color: rgb(255, 255, 255);
+    width: 50%;
+    padding: 40px;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .top {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.imageContainer {
+    box-sizing: border-box;
+    border-radius: 0px 15px 15px 0px;
+    background-color: #f5dbc4;
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+}
+
+.logo {
+    width: 50%;
+}
+
+.img {
+    width: 100%;
+    transition: transform 0.3s;
+}
+.img:hover {
+    transform: scale(1.05);
+}
+
+.errorContainer {
+    /* padding-left: 20px; */
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .error {
+        padding: 10px;
+        color: rgb(255, 100, 100);
+    }
+}

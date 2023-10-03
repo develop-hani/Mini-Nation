@@ -1,0 +1,16 @@
+.productionStudent::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+.productionStudent::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+.productionStudent::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+.productionStudent {
+    max-height: 70vh; 
+    overflow-y: auto;   
+    width: 80%;
+    margin: auto;
+}

@@ -23,4 +23,6 @@ public interface MemberService {
 
     Nation getNationByMemberId(String memberId);
 
+    void updateBalance(String memberId, int amount);
+
 }

@@ -1,7 +1,7 @@
 package com.ssafy.mini.global.config;
 
 
-import com.ssafy.mini.global.jwt.JwtAuthenticationFilter;
+import com.ssafy.mini.global.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +23,7 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .httpBasic().disable()
+                .cors().and()
                 .csrf().disable()
                 .authorizeRequests(requests -> requests
                         .antMatchers(HttpMethod.OPTIONS).permitAll()  // preflight 로 보내는 요청
@@ -37,6 +38,10 @@ public class SecurityConfig {
 
                         // auth 테스트
                         .antMatchers(HttpMethod.GET, "/auth/test").permitAll()
+
+                        // s3 이미지 업로드
+                        .antMatchers(HttpMethod.POST, "/s3/upload").permitAll()
+                        .antMatchers(HttpMethod.POST, "/corporation/register").permitAll()
 
                         // 그 외 요청은 모두 인증 필요
                         .anyRequest().authenticated()

@@ -1,0 +1,30 @@
+.productionTeacher::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+.productionTeacher::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+.productionTeacher::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+.productionTeacher {
+    max-height: 70vh; 
+    overflow-y: auto;   
+    width: 80%;
+    margin: auto;
+}
+
+/* 배경 모달 스타일 */
+.modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 투명도 조절 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; /* 모달보다 위에 표시하기 위한 z-index 값 */
+}

@@ -1,0 +1,17 @@
+/* productionRow.module.css */
+.container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%; /* 부모 요소인 container의 100%를 차지하도록 설정 */
+    box-sizing: border-box; /* 요소의 내부 크기가 width에 포함되도록 설정 */
+    padding: 20px 0;
+    border-bottom: 1px solid rgb(209, 209, 209);
+}
+
+.Comp1, .Comp2, .Comp3, .Comp4, .Comp5, .Comp6, .Comp7, .Comp8 {
+    width: 10%; /* 8개의 컴포넌트가 부모 요소의 10% 너비를 갖도록 설정 */
+    box-sizing: border-box; /* 요소의 내부 크기가 width에 포함되도록 설정 */
+    display: flex;
+    justify-content: center; /* 가운데 정렬을 위한 설정 */
+    align-items: center; /* 가운데 정렬을 위한 설정 */
+}

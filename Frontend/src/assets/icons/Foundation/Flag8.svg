@@ -1,0 +1,21 @@
+<svg width="200" height="120" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="200" height="120" fill="#1E1E1E"/>
+<g clip-path="url(#clip0_0_1)">
+<rect width="1920" height="1257" transform="translate(-856 -628)" fill="#FAFAFB"/>
+<rect x="-856" y="-628" width="1920" height="1257" fill="#D76904" fill-opacity="0.4"/>
+<rect x="-650" y="-387" width="1496" height="776" rx="20" fill="white"/>
+<path d="M20 120L180 120C189.319 120 197.15 113.626 199.37 105L0.630127 105C2.85034 113.626 10.6808 120 20 120Z" fill="#860088"/>
+<path d="M0 90L0 100C0 101.727 0.218765 103.402 0.630088 105L199.37 105C199.781 103.402 200 101.727 200 100V90L0 90Z" fill="#3907FF"/>
+<rect y="75" width="200" height="15" fill="#008925"/>
+<rect y="60" width="200" height="15" fill="#FDF500"/>
+<rect y="45" width="200" height="15" fill="#FF8700"/>
+<rect y="30" width="200" height="15" fill="#FC0000"/>
+<path d="M0.630088 15C0.218765 16.5981 0 18.2735 0 20L0 30L200 30V20C200 18.2735 199.781 16.5981 199.37 15L0.630088 15Z" fill="#804D00"/>
+<path d="M180 0L20 0C10.6808 0 2.85034 6.37387 0.630127 15L199.37 15C197.15 6.37386 189.319 0 180 0Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_0_1">
+<rect width="1920" height="1257" fill="white" transform="translate(-856 -628)"/>
+</clipPath>
+</defs>
+</svg>

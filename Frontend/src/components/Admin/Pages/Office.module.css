@@ -1,0 +1,29 @@
+/* Office.module.css */
+.background {
+    width: 100vw;
+    height: 95vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .info {
+    width: 60vw;
+    min-height: 70vh;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #FFF;
+    margin: 0 auto 5vh;
+    border: solid grey 1px;
+    box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    width: 40vw;
+    min-height: 50vh;
+    height: auto;
+}

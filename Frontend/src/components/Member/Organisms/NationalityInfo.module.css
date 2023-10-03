@@ -1,0 +1,41 @@
+/* NationalityInfo.module.css */
+.info {
+    width: 30vw;
+    height: auto;
+    background-color: white;
+    border-radius: 0px 15px 15px 0px;
+    overflow: visible;
+    flex-wrap: wrap;
+}
+
+.infoContent {
+    width: 80%;
+    height: 80%;
+    margin: 10% auto 10% auto; /* 상위 10%, 하위 10%의 마진을 설정 */
+}
+
+.infoContent > p {
+    margin: 10% 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.search {
+    width: 10vw;
+}
+
+.resultContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10% 0;
+    flex-wrap: wrap;
+}
+
+.resultSplitter {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}

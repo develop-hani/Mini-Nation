@@ -1,13 +1,17 @@
 package com.ssafy.mini.domain.nation.service;
 
 import com.ssafy.mini.domain.flag.entity.Flag;
+import com.ssafy.mini.domain.flag.mapper.FlagMapper;
 import com.ssafy.mini.domain.flag.repository.FlagRepository;
 import com.ssafy.mini.domain.flag.service.FlagService;
 import com.ssafy.mini.domain.master.repository.MasterRepository;
 import com.ssafy.mini.domain.member.entity.Member;
 import com.ssafy.mini.domain.member.repository.MemberRepository;
+import com.ssafy.mini.domain.nation.dto.request.LawUpdateRequest;
 import com.ssafy.mini.domain.nation.dto.request.NationCreateRequest;
+import com.ssafy.mini.domain.nation.dto.response.AllFlagResponse;
 import com.ssafy.mini.domain.nation.dto.response.FlagListResponse;
+import com.ssafy.mini.domain.nation.dto.response.LawInfoResponse;
 import com.ssafy.mini.domain.nation.entity.Nation;
 import com.ssafy.mini.domain.nation.mapper.NationMapper;
 import com.ssafy.mini.domain.nation.repository.NationRepository;
@@ -19,7 +23,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,6 +40,7 @@ public class NationServiceImpl implements NationService {
     private final FlagRepository flagRepository;
 
     private final FlagService flagService;
+    private final FlagMapper flagMapper;
 
     private final NationMapper nationMapper;
 
@@ -133,6 +141,16 @@ public class NationServiceImpl implements NationService {
     }
 
     @Override
+    public List<AllFlagResponse> listAllFlags() {
+        log.info("Nation Service Layer::flagList() called");
+
+        List<Flag> flagList = flagRepository.findAll();
+        return flagList.stream()
+                .map(flagMapper::flagToAllFlagResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void checkPresident(String nationName, String presidentName) {
         log.info("Nation Service Layer::checkPresident() called");
 
@@ -144,6 +162,73 @@ public class NationServiceImpl implements NationService {
         if(!president.equals(presidentName)) {
             throw new MNException(ErrorCode.NOT_MATCH_PRESIDENT);
         }
+    }
+
+    @Override
+    public LawInfoResponse info(String memberId) {
+        log.info("Nation Service Layer::info() called");
+
+        Member member = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        Nation nation = member.getIsoSeq();
+
+        String nationName = nation.getIsoName();
+        String currency = nation.getIsoCurrency();
+        String payday = nation.getPayday();
+        int population = memberRepository.countByIsoSeq(nation);
+
+        List<Tax> taxList = taxRepository.findByNation(nation);
+
+        Map<String, Byte> tax = new HashMap<>();
+
+        for(Tax t : taxList) {
+            String taxType = t.getTaxType().getExpression();
+            if(taxType.equals("IT")) {
+                tax.put("incomeTax", t.getTaxRate());
+            } else if(taxType.equals("VT")) {
+                tax.put("vat", t.getTaxRate());
+            }
+        }
+
+        log.info("tax: " + tax);
+
+        return LawInfoResponse.builder()
+                .nationName(nationName)
+                .currency(currency)
+                .payday(payday)
+                .tax(tax)
+                .population(population)
+                .build();
+    }
+
+    @Override
+    public void updateLaw(String memberId, LawUpdateRequest lawUpdateRequest){
+        log.info("Nation Service Layer::updateLaw() called");
+
+        Member member = memberRepository.findByMemId(memberId)
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_MEMBER));
+
+        // 선생님 권한 체크
+        if(!member.getMemType().getExpression().equals("TC")) {
+            throw new MNException(ErrorCode.NO_AUTHORITY);
+        }
+
+        // 국가 정보 수정
+        Nation nation = member.getIsoSeq();
+        nation.updateNation(lawUpdateRequest);
+        nationRepository.save(nation);
+
+        log.info("incomeTax: " + lawUpdateRequest.getIncomeTax());
+        log.info("vat: " + lawUpdateRequest.getVat());
+
+        // 세금 정보 수정
+        taxRepository.saveTaxRateByIsoSeqandTaxTp(nation, masterRepository.findById("TAX01")
+                        .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_CODE)),
+                lawUpdateRequest.getIncomeTax());
+        taxRepository.saveTaxRateByIsoSeqandTaxTp(nation, masterRepository.findById("TAX02")
+                .orElseThrow(() -> new MNException(ErrorCode.NO_SUCH_CODE)), lawUpdateRequest.getVat());
+
     }
 
 

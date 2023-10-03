@@ -1,0 +1,98 @@
+/* ProductionApplicantModal.module.css */
+
+.wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;    
+    width: 50vw;
+    height: 70vh;
+    transform: translate(-50%, -50%);    
+    border-radius: 15px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.wrapper::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+.wrapper::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+.wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+.modalCard {
+    width: 80%;
+    margin: auto;
+}
+
+.modalTitle {
+    margin-top: 10%;
+}
+
+.modalRow {
+    display: flex;
+}
+
+.modalRowName {
+    flex: 0.5; /* 1을 사용하여 균일하게 10%를 차지하게 함 */
+    text-align: center;
+}
+
+.modalRowButtons {
+    flex: 0.5;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modalConfirmButton {
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 85px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    left: 50vw;
+}
+.modalConfirmButton:hover {
+    background-color: rgb(31, 41, 55);
+    color: #fff;
+    border: rgb(31, 41, 55);
+}
+.modalCloseButton {
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 85px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    left: 50vw;
+}
+.modalCloseButton:hover {
+    background-color: rgb(31, 41, 55);
+    color: #fff;
+    border: rgb(31, 41, 55);
+}
+
+.closeButtonWrapper {
+    position: sticky;
+    top: 0;
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+    outline: none;
+    color: #999;
+}

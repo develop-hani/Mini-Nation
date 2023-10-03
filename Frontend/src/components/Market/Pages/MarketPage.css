@@ -1,0 +1,26 @@
+/* MarketPage.css */
+.marketContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.buttonWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.marketSelectButtonStyle {
+    color: green;
+    margin: 0 10px;
+}
+
+.marketSelectButtonStyle.active {
+    background-color: blue;
+    color: white;
+}

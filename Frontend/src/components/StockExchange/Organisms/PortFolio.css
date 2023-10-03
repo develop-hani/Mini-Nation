@@ -1,0 +1,57 @@
+.portfolio-container {
+  display: flex;
+  flex-direction: column;
+
+  margin: 0 0 8px 15px;
+  height: 332px;
+  background: lightgrey;
+  background: #e8e8e8;
+  box-shadow: inset 20px 20px 60px #c5c5c5, inset -20px -20px 60px #ffffff;
+  transition: all .5s ease-in-out;
+  border-radius: 1.5rem;
+  font-weight: bolder;
+  color: #8a8989;
+}
+
+.portfolio-item {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  font-size: 10px;
+  margin: 5px 20px;
+  box-sizing: border-box;
+}
+
+.portfolio-item-logo {
+  flex: 1;
+}
+.portfolio-item-holdings {
+  flex: 1;
+}
+.portfolio-item-value {
+  flex: 3;
+}
+.portfolio-item-status {
+  flex: 1;
+}
+
+.portfolio-item-value span {
+  color: darkslategrey;
+  font-size: 11px;
+}
+
+
+.status-box {
+  width: 40px;
+  height: 40px;
+  color: white;
+  border-radius: 13px;
+}
+
+.positive-status {
+  background-color: #28CC56;
+}
+
+.negative-status {
+  background-color: #D34645;
+}

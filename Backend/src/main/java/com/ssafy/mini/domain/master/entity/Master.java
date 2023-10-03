@@ -3,11 +3,12 @@ package com.ssafy.mini.domain.master.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "master")
 @Getter
-public class Master {
+public class Master implements Serializable {
 
     @Id
     @Column(name = "code", length = 5)

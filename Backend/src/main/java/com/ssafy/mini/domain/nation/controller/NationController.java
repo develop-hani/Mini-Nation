@@ -3,9 +3,8 @@ package com.ssafy.mini.domain.nation.controller;
 import com.ssafy.mini.domain.nation.dto.request.CheckPresidentRequest;
 import com.ssafy.mini.domain.nation.dto.request.NationCreateRequest;
 import com.ssafy.mini.domain.nation.dto.request.NationSearchRequest;
-import com.ssafy.mini.domain.nation.dto.response.FlagListResponse;
 import com.ssafy.mini.domain.nation.service.NationService;
-import com.ssafy.mini.global.jwt.JwtProvider;
+import com.ssafy.mini.global.auth.jwt.JwtProvider;
 import com.ssafy.mini.global.response.SuccessResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -87,10 +86,26 @@ public class NationController {
             @ApiResponse(code = 200, message = "국기 리스트 조회 성공"),
             @ApiResponse(code = 404, message = "국기 리스트 조회 실패")
     })
-    public FlagListResponse flagList(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken) {
+    public SuccessResponse flagList(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken) {
         log.info("Nation Controller Layer::flagList() called");
 
-        return nationService.flagList();
+        return SuccessResponse.builder()
+                .data(nationService.flagList())
+                .build();
+    }
+
+    @GetMapping("/flags")
+    @ApiOperation(value = "국기 리스트")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "국기 리스트 조회 성공"),
+            @ApiResponse(code = 404, message = "국기 리스트 조회 실패")
+    })
+    public SuccessResponse listAllFlags(@RequestHeader("Authorization") @ApiParam(value = "토큰", required = true) String accessToken) {
+        log.info("Nation Controller Layer::listAllFlags() called");
+
+        return SuccessResponse.builder()
+                .data(nationService.listAllFlags())
+                .build();
     }
 
     @PostMapping("/nation/president")

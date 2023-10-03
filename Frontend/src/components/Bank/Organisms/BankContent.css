@@ -1,0 +1,25 @@
+.bankSelectBlackBackground {
+    display: flex;
+    height: 15vh;
+    width: 40vh;
+    background-color: #ffffff;
+    color: black;
+    font-size: 24px;
+    margin-left: 20%;
+    justify-content: flex-start; /* 왼쪽 정렬을 위해 */
+    align-items: center; /* 버튼을 가로선 중앙에 배치 */
+    border-radius: 30px;
+}
+
+.bankSelectButtonStyle {
+    color: green;
+}
+
+.bankSelectButtonWrapperStyle {
+    margin-right: 20px;
+}
+
+.bankSelectButtonStyle.active {
+    background-color: blue;
+    color: white;  
+}

@@ -1,0 +1,36 @@
+.fox-box {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+}
+
+.logo {
+    width: 40px;
+    margin-right: 20px;
+}
+
+.fox-title {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    text-align: left;
+    margin-left: 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.fox-text {
+    margin-top: 10px; 
+}
+
+.highlight {
+    color: red; 
+}
+

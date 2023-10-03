@@ -1,0 +1,25 @@
+/* Nationality.module.css */
+.background {
+    background-color: rgba(215, 105, 4, 0.4);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 60vw;
+    margin: auto;
+}
+
+.container2 {
+    display: flex;
+    width: 60vw; 
+    height: auto      
+}
+
+.img {
+    width: 30vw;
+    height: auto;
+    border-radius: 15px 0px 0px 15px;
+}

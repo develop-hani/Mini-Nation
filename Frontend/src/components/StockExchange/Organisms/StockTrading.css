@@ -1,0 +1,30 @@
+.order-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 5px 15px;
+  height: 254px;
+  background: lightgrey;
+  background: #e8e8e8;
+  box-shadow: inset 20px 20px 60px #c5c5c5, inset -20px -20px 60px #ffffff;
+  transition: all .5s ease-in-out;
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-weight: bolder;
+  color: #8a8989;
+}
+
+.order-tab-container {
+  display: flex;
+  gap: 15px;
+
+  position: absolute;
+  top: 15px;
+}
+
+.buysell-container {
+  gap: 15px;
+  position: absolute;
+  top: 70px;
+}

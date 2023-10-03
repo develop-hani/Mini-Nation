@@ -1,0 +1,6 @@
+.bankPageContainer {
+    display: flex;
+    flex-direction: column;  /* 수직 방향으로 아이템 배치 */
+    align-items: stretch;    /* 아이템들이 컨테이너의 너비를 꽉 채우도록 설정 */
+    height: 100vh;           /* 뷰포트의 높이로 설정 */
+}
